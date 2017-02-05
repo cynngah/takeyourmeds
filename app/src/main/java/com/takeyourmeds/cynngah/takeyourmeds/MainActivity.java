@@ -146,11 +146,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                void save(byte[] bytes) {
-                    File file12 = getOutputMediaFile();
-                    OutputStream outputStream = null;
-                    try {
-                        outputStream = new FileOutputStream(file12);
+                void save(byte[] bytes)
+                {
+                    File file12=getOutputMediaFile();
+                    OutputStream outputStream=null;
+                    try
+                    {
+                        // call the calendar function or API from AWS
+                        outputStream=new FileOutputStream(file12);
                         outputStream.write(bytes);
                     } catch (Exception e) {
                         e.printStackTrace();
