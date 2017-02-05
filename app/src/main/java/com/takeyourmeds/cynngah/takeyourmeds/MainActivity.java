@@ -16,36 +16,40 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.LogRecord;
+
+// calendar
+import java.util.Calendar;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
     private Size previewsize;
@@ -88,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         getPicture();
+                        addCalendarEvent();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -102,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }
-
 
 
     void getPicture() {
@@ -328,5 +332,22 @@ public class MainActivity extends AppCompatActivity {
         mediaFile = new File(mediaStorageDir.getPath() + File.separator
                 + "IMG_" + timeStamp + ".jpg");
         return mediaFile;
+    }
+    public void addCalendarEvent(){
+
+        Calendar cal = Calendar.getInstance();
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+
+        int millisInDay = 1000 * 60 * 60 * 24;
+        int hoursAwayFromGMT = 5;
+        int timeZoneAdjust = 1000 * 60 * 60 * hoursAwayFromGMT;
+        Long takeMedTime = (cal.getTimeInMillis() / millisInDay) * millisInDay + timeZoneAdjust + 9*60*60*1000;
+
+        intent.putExtra("beginTime", takeMedTime);
+        intent.putExtra("rrule", "FREQ=DAILY");
+        intent.putExtra("endTime", takeMedTime+60*60*1000);
+        intent.putExtra("title", "Take 1 tablet Hydralazine HCl 50mg with glass of orange juice");
+        startActivity(intent);
     }
 }
